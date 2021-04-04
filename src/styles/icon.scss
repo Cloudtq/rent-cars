@@ -1,0 +1,34 @@
+i[class^=icon] {
+    // 获取类名开头为icon的标签
+    display: inline-block;
+    background-repeat: no-repeat;
+}
+
+.icon-w-44 {
+    width: 44px;
+    height: 44px;
+}
+
+.icon-help {
+    background-image: url(~@/assets/images/icon/icon-help.png);
+}
+
+.icon-user-link001 {
+    background-image: url(~@/assets/images/icon/icon-router-link001.png);
+}
+
+.icon-user-link002 {
+    background-image: url(~@/assets/images/icon/icon-router-link002.png);
+}
+
+.icon-user-link003 {
+    background-image: url(~@/assets/images/icon/icon-router-link003.png);
+}
+
+.icon-user-link004 {
+    background-image: url(~@/assets/images/icon/icon-router-link004.png);
+}
+
+.icon-user-link005 {
+    background-image: url(~@/assets/images/icon/icon-router-link005.png);
+}

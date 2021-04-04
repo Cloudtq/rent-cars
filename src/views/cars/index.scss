@@ -1,0 +1,68 @@
+.cars-wrap {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 94px;
+    z-index: 11;
+}
+
+.cars-swiper-wrap {
+    margin: 0 155px;
+    .swiper-container {
+        overflow: initial;
+    }
+    .swiper-button-prev,
+    .swiper-button-next {
+        top: 50%;
+        margin-top: -50px;
+        width: 60px;
+        height: 100px;
+        background-color: #fff;
+        border-radius: 100px;
+        @include webkit(box-shadow, 0 0 18px 0 rgba(0, 0, 0, .2));
+        @include webkit(transition, all .3s ease 0s);
+        &:hover {
+            background-color: $color-main;
+        }
+    }
+    .swiper-button-prev {
+        left: 53px;
+        &:after {
+            content: "";
+            width: 17px;
+            height: 17px;
+            margin-left: 5px;
+            border-left: 3px solid #000;
+            border-top: 3px solid #000;
+            @include webkit(transform, rotate(-45deg));
+            @include webkit(box-sizing, border-box);
+        }
+        &:hover {
+            &:after {
+                border-left: 3px solid $color-blue;
+                border-top: 3px solid $color-blue;
+                @include webkit(transform, rotate(-45deg));
+            }
+        }
+    }
+    .swiper-button-next {
+        right: 53px;
+        &:after {
+            content: "";
+            width: 17px;
+            height: 17px;
+            margin-right: 5px;
+            border-right: 3px solid #000;
+            border-top: 3px solid #000;
+            @include webkit(transform, rotate(45deg));
+            @include webkit(box-sizing, border-box);
+        }
+        &:hover {
+            &:after {
+                border-right: 3px solid $color-blue;
+                border-top: 3px solid $color-blue;
+                @include webkit(transform, rotate(45deg));
+            }
+        }
+    }
+}

@@ -3,10 +3,20 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
+//Element-UI
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI);
+
+import "./components/back"
+//高德地图
+import "./plugin/aMap"
+
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  store,
-  render: (h) => h(App),
+    router,
+    store,
+    render: (h) => h(App),
 }).$mount("#app");
