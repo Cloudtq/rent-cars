@@ -1,67 +1,65 @@
 <template>
-    <div>
+  <div>
 
-        <!-- cars data渲染 -->
-        <Cars/>
-        <!-- 地图 -->
-        <Map/>
-        <!-- 导航 -->
-        <NavBar/>
-        <!-- 会员 -->
-        <div id="children-view" :class='{open:show}'>
-            <router-view></router-view>
-        </div>
+    <!-- cars data渲染 -->
+    <Cars />
+    <!-- 地图 -->
+    <Map />
+    <!-- 导航 -->
+    <NavBar />
+    <!-- 会员 -->
+    <div id="children-view" :class='{open:show}'>
+      <router-view></router-view>
     </div>
+    <Login />
+  </div>
 </template>
 <script>
 import Map from '../amap'
 import Cars from '../cars'
 import NavBar from '@c/navbar'
+import Login from './login'
 
-
-export default { 
-    name: "Index",
-    components: {
-        Map,
-        Cars,
-        NavBar
+export default {
+  name: 'Index',
+  components: {
+    Map,
+    Cars,
+    NavBar,
+    Login,
+  },
+  data() {
+    return {}
+  },
+  computed: {
+    show() {
+      return this.$route.name === 'Index' ? false : true
     },
-    data () {
-        return {}
-    },
-    computed: {
-        show(){
-            return this.$route.name === 'Index' ? false : true
-        }
-    },
-    mounted () {
-        document.addEventListener('mouseup',(e)=>{
-            const userCon = document.getElementById('children-view')
-            if(userCon && !userCon.contains(e.target)){
-                this.$router.push('/')
-            }
-        })
-    },
-    watch: {
-
-    }
-
-} 
+  },
+  mounted() {
+    document.addEventListener('mouseup', (e) => {
+      const userCon = document.getElementById('children-view')
+      if (userCon && !userCon.contains(e.target)) {
+        this.$router.push('/')
+      }
+    })
+  },
+  watch: {},
+}
 </script>
 <style lang='scss'>
-#children-view{
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: -600px;
-    width: 410px;
-    @include webkit(transition,all .3s ease 0s);
-    @include webkit(box-shadow,-5px 0 38px 0 rgba(0,0,0,.4));
-    background-color: #34393f;
-    z-index: 101;
-    &.open {
-        right: 0px;
-    }
+#children-view {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: -600px;
+  width: 410px;
+  @include webkit(transition, all 0.3s ease 0s);
+  @include webkit(box-shadow, -5px 0 38px 0 rgba(0, 0, 0, 0.4));
+  background-color: #34393f;
+  z-index: 101;
+  &.open {
+    right: 0px;
+  }
 }
-
 </style>
