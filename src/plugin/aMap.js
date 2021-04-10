@@ -10,5 +10,5 @@ AMap.initAMapApiLoader({
     // 申请的高德key
     key: "94eaf8e38c1597a30a7a4ab37b56aea4",
     // 插件集合
-    plugin: ["AMap.Geolocation"],
+    plugin: ["AMap.Geolocation", "AMap.Walking"],
 });

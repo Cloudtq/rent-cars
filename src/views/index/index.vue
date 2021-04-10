@@ -4,7 +4,7 @@
     <!-- cars data渲染 -->
     <Cars />
     <!-- 地图 -->
-    <Map @callbackComponent="callbackComponent" />
+    <Map ref='map' @callbackComponent="callbackComponent" />
     <!-- 导航 -->
     <NavBar />
     <!-- 会员 -->
@@ -60,11 +60,28 @@ export default {
     loadMap() {
       this.getParking()
     },
-
     getParking() {
       Parking().then((res) => {
-        console.log(res)
+        const data = res.data.data
+        data.forEach((item) => {
+          item.position = item.lnglat.split(',')
+          item.content =
+            "<img src='" +
+            require('@/assets/images/parking_location_img.png') +
+            " ' />"
+          item.offset = [-25, -55]
+          item.offsetText = [-25, -55]
+          item.text = `<div  style="width: 52px; font-size: 20px; color: #fff; text-align: center; height: 52px; border-radius: 100px;line-height:50px; ">${item.carsNumber}</div>`
+          item.events = {
+            click: (e) => this.walking(e),
+          }
+        })
+        //调地图的方法
+        this.$refs.map.parkingData(data)
       })
+    },
+    walking(e) {
+      this.$refs.map.handlerWaling(e.target.getExtData())
     },
   },
   watch: {},

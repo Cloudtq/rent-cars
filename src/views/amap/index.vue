@@ -1,14 +1,28 @@
 <template>
   <div class="amap-wrap">
     <el-amap ref="map" vid="amapContainer" :zoom='zoom' :amap-manager="amapManager" :events="events" :center="center" class="amap-demo">
+      <!-- 覆盖物，自身定位 -->
       <el-amap-circle v-for="item in circle" :key="item.id" :center="item.center" :radius="item.radius" :fillColor="item.color" :strokeColor="item.color" :strokeOpacity="item.strokeOpacity"
         :strokeWeight="item.strokeWeight">
       </el-amap-circle>
+      <!-- 覆盖物，停车场 -->
+      <el-amap-marker v-for="(item,index) in parking" :offset="item.offset" :key="item.id" :content="item.content" :position="item.position" :vid="index"></el-amap-marker>
+      <!-- 覆盖物，停车场，车辆数 -->
+      <el-amap-marker v-for="(item,index) in parking" :extData='item' :key="item.id+index" :offset='item.offsetText' :position="item.position" :content="item.text" :events="item.events">
+      </el-amap-marker>
+      <!-- 覆盖物，停车场，距离信息 -->
+      <el-amap-marker v-for="item in parkingInfo" zIndex="1000" :key="item.id" :offset="item.offset" :position="item.position" :content="item.text">
+      </el-amap-marker>
     </el-amap>
   </div>
 </template>
 <script>
 import { AMapManager, lazyAMapApiLoaderInstance } from 'vue-amap'
+import { Selflocation } from './location'
+import { Walking } from './walking'
+
+import styleCss from './style'
+
 let amapManager = new AMapManager()
 export default {
   name: 'Index',
@@ -16,7 +30,7 @@ export default {
     const _this = this
     return {
       amapManager,
-      center: [113.289934, 23.149503],
+      center: [114.4141, 23.03339],
       events: {
         init(o) {
           lazyAMapApiLoaderInstance.load().then(() => {
@@ -35,6 +49,22 @@ export default {
           strokeWeight: 30,
         },
       ],
+      parking: [
+        // {
+        //   id: 1,
+        //   content:
+        //     "<img src='" +
+        //     require('@/assets/images/parking_location_img.png') +
+        //     " ' />",
+        //   position: [114.4141, 23.03339],
+        //   offset: [-25, -55],
+        // },
+      ],
+      parkingCarsNumber: [],
+      self_lng: '',
+      self_lat: '',
+      parkingInfo: [],
+      parkingDatas: {},
     }
   },
   methods: {
@@ -46,43 +76,57 @@ export default {
         function: 'loadMap',
       })
 
-      var geolocation = new AMap.Geolocation({
-        enableHighAccuracy: true,
-        timeout: 10000,
-        buttonPosition: 'RB',
-        buttonOffset: new AMap.Pixel(-50, 0),
-        zoomToAccuracy: true,
-        markerOptions: {
-          content: ' ',
+      this.selflocation()
+    },
+    selflocation() {
+      //自身定位
+      Selflocation({
+        map: this.map,
+        complete: (val) => this.onComplete(val),
+      })
+    },
+    onComplete(data) {
+      this.self_lng = data.position.lng
+      this.self_lat = data.position.lat
+      this.circle[0].center = [this.self_lng, this.self_lat]
+    },
+    parkingData(data) {
+      this.parking = data
+    },
+    handlerWaling(data) {
+      this.parkingDatas = data
+      const lnglatArr = data.lnglat.split(',')
+      //步行路线规划
+      Walking({
+        map: this.map,
+        position_start: [this.self_lng, this.self_lat],
+        position_end: lnglatArr,
+        complete: (val) => this.handlerWalkingComplete(val),
+      })
+    },
+    handlerWalkingComplete(val) {
+      console.log(val)
+      this.parkingInfo = [
+        {
+          id: 1,
+          position: this.parkingDatas.lnglat.split(','),
+          text: `<div style='${styleCss.parkingInfoWrap}'>
+            <span style='${styleCss.parkingInfoNumber}'>${this.parkingDatas.carsNumber}</span>辆车
+            <span style='${styleCss.parkingInfoLine}'></span>
+            距离您${val.routes[0].distance}米
+            </div>`,
+          offset: [-25, -55],
         },
-      })
-
-      this.map.addControl(geolocation)
-
-      geolocation.getCurrentPosition((status, result) => {
-        if (status == 'complete') {
-          const lng = result.position.lng
-          const lat = result.position.lat
-          this.circle[0].center = [lng, lat]
-        } else {
-        }
-      })
-
-      //   let marker = new AMap.Marker({
-      //     position: [113.289934, 23.149503],
-      //   })
-
-      //   marker.setMap(this.map)
+      ]
     },
   },
-  mounted() {
-    // lazyAMapApiLoaderInstance.load().then(() => {
-    //   // your code ...
-    //   this.map = new AMap.Map('amapContainer', {
-    //     center: [113.289934, 23.149503],
-    //     zoom: this.zoom,
-    //   })
-    // })
+  mounted() {},
+  watch: {
+    '$store.state.location.selfLocation': {
+      handler() {
+        this.selflocation()
+      },
+    },
   },
 }
 </script>

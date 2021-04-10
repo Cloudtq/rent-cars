@@ -4,7 +4,6 @@ const tokenKey = "tokenAdmin";
 const userNameKey = "username";
 // 获取token
 export function getToken() {
-    console.log(Cookies.get(tokenKey));
     return Cookies.get(tokenKey);
 }
 // 写入token
