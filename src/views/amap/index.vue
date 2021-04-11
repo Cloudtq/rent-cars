@@ -68,6 +68,7 @@ export default {
     }
   },
   methods: {
+    //初始化地图
     initMap() {
       this.map = amapManager.getMap()
 
@@ -78,6 +79,8 @@ export default {
 
       this.selflocation()
     },
+
+    //获取自身定位
     selflocation() {
       //自身定位
       Selflocation({
@@ -85,27 +88,38 @@ export default {
         complete: (val) => this.onComplete(val),
       })
     },
+
+    //完成自身定位回调
     onComplete(data) {
       this.self_lng = data.position.lng
       this.self_lat = data.position.lat
       this.circle[0].center = [this.self_lng, this.self_lat]
     },
+
+    //保存停车场信息
     parkingData(data) {
       this.parking = data
     },
-    handlerWaling(data) {
-      this.parkingDatas = data
-      const lnglatArr = data.lnglat.split(',')
+
+    //获取步行终点坐标
+    handlerWaling(lnglat) {
       //步行路线规划
       Walking({
         map: this.map,
         position_start: [this.self_lng, this.self_lat],
-        position_end: lnglatArr,
+        position_end: lnglat,
         complete: (val) => this.handlerWalkingComplete(val),
       })
     },
+
+    //步行路线回调
     handlerWalkingComplete(val) {
-      console.log(val)
+      let distance = null
+      if (val.routes[0].distance >= 1000) {
+        distance = (val.routes[0].distance / 1000).toFixed(2) + '公里'
+      } else {
+        distance = val.routes[0].distance + '米'
+      }
       this.parkingInfo = [
         {
           id: 1,
@@ -113,11 +127,16 @@ export default {
           text: `<div style='${styleCss.parkingInfoWrap}'>
             <span style='${styleCss.parkingInfoNumber}'>${this.parkingDatas.carsNumber}</span>辆车
             <span style='${styleCss.parkingInfoLine}'></span>
-            距离您${val.routes[0].distance}米
+            距离您${distance}
             </div>`,
           offset: [-25, -55],
         },
       ]
+    },
+
+    //保存步行路线信息
+    saveParkingDatas(params) {
+      if (params) this[params.key] = params.value
     },
   },
   mounted() {},

@@ -81,7 +81,11 @@ export default {
       })
     },
     walking(e) {
-      this.$refs.map.handlerWaling(e.target.getExtData())
+      this.$refs.map.handlerWaling(e.target.getExtData().lnglat.split(','))
+      this.$refs.map.saveParkingDatas({
+        key: 'parkingDatas',
+        value: e.target.getExtData(),
+      })
     },
   },
   watch: {},
