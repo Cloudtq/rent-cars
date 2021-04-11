@@ -2,7 +2,7 @@
   <div>
 
     <!-- cars data渲染 -->
-    <Cars />
+    <Cars ref="cars" />
     <!-- 地图 -->
     <Map ref='map' @callbackComponent="callbackComponent" />
     <!-- 导航 -->
@@ -73,7 +73,10 @@ export default {
           item.offsetText = [-25, -55]
           item.text = `<div  style="width: 52px; font-size: 20px; color: #fff; text-align: center; height: 52px; border-radius: 100px;line-height:50px; ">${item.carsNumber}</div>`
           item.events = {
-            click: (e) => this.walking(e),
+            click: (e) => {
+              this.walking(e)
+              this.getCarsList(e)
+            },
           }
         })
         //调地图的方法
@@ -86,6 +89,11 @@ export default {
         key: 'parkingDatas',
         value: e.target.getExtData(),
       })
+    },
+    getCarsList(e) {
+      // console.log(e)
+      const data = e.target.getExtData()
+      this.$refs.cars && this.$refs.cars.getCarsList(data.id)
     },
   },
   watch: {},
