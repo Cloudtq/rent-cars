@@ -1,5 +1,5 @@
 <template>
-  <div class="cars-wrap">
+  <div class="cars-wrap" v-if="carsList && carsList.length>0">
     <div class="cars-swiper-wrap">
       <swiper ref="mySwiper" :options="swiperOptions">
         <swiper-slide v-for='item in carsList' :key="item.id">
@@ -69,8 +69,20 @@ export default {
     getCarsList(parkingId) {
       GetCarsList({ parkingId }).then((res) => {
         res.data.data && (this.carsList = res.data.data)
-        console.log(res.data.data)
+        this.$store.commit('app/CHANGE_RequestListFlag', false)
+        console.log('请求数据完成')
       })
+    },
+  },
+  watch: {
+    '$store.state.app.isClickCarsList': {
+      handler(newValue) {
+        console.log(newValue)
+        if (!newValue) {
+          this.carsList = []
+          this.$store.commit('app/CHANGE_CarsListFlag', true)
+        }
+      },
     },
   },
 }

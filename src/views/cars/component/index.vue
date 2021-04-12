@@ -1,13 +1,13 @@
 <template>
   <div>
-    <section class="cars-item">
+    <section class="cars-item" @click="openCarsInfo">
       <header>
         <h4 class="cars-logo">
           <img :src="data.imgUrl" alt="图片">
           <span class="name">{{data.carsMode}}</span>
         </h4>
         <p class="cars-attr">
-          新能源汽车 5座
+          {{data|GetEnergyType}} {{data|GetSeatNumber}}
         </p>
       </header>
       <div class="cars-content">
@@ -29,7 +29,7 @@
               </ul>
               <p class="distance">
                 <sub>约</sub>
-                <strong>600</strong>
+                <strong>{{Math.round(data.countKm)}}</strong>
                 <sub>KM</sub>
               </p>
             </div>
@@ -41,33 +41,33 @@
         <a href="javascript:void(0);" class="parking-link">{{data.parkingName}}</a>
       </footer>
     </section>
-    <!-- <section class="cars-item cars-detailed" :style="'height:' + height">
+    <section class="cars-item cars-detailed" :style="'height:' + cars_info_height" v-if="cars_info_show">
       <div class="scroll">
         <h4 class="column">
-          某某停车场
-          <i class="close"></i>
+          {{data.parkingName}}
+          <i class="close" @click="closeCarsInfo"></i>
         </h4>
         <header>
           <h4 class="cars-logo">
-            <img src="../../../assets/images/cars-logo.png" alt="图片">
-            <span class="name">cars-name</span>
+            <img :src="data.imgUrl" alt="图片">
+            <span class="name">{{data.carsMode}}</span>
           </h4>
           <p class="cars-attr">
-            新能源汽车 5座
+            {{data|GetEnergyType}} {{data|GetSeatNumber}}
           </p>
         </header>
         <img src="../../../assets/images/pic001.png" alt="" width="100%">
         <div class="clearfix">
-          <div class="pull-left fs-24">粤B745N8</div>
+          <div class="pull-left fs-24">{{data.carsNumber}}</div>
           <p class="distance pull-right">
             <sub>约</sub>
-            <strong>600</strong>
+            <strong>{{Math.round(data.countKm)}}</strong>
             <sub>KM</sub>
           </p>
         </div>
         <div class="cars-electric-box">
           <div class="p-r">
-            <span class="e-high" style="width:80%"></span>
+            <span class="e-high" :style="data | electricNumber('width')"></span>
             <span class="e-bg"></span>
           </div>
           <div></div>
@@ -98,35 +98,73 @@
       </div>
 
       <a href="javascript:void(0);" class="select-car-btn">预约用车</a>
-    </section> -->
+    </section>
   </div>
 </template>
 <script>
 export default {
   name: 'CarsList',
   props: {
-    height: {
-      type: String,
-      default: '257px',
-    },
     data: {
       type: Object,
       default: () => ({}),
     },
   },
+  data() {
+    return {
+      cars_info_show: false,
+      cars_info_height: 0,
+      timer: null,
+    }
+  },
   filters: {
-    electricNumber(data) {
+    electricNumber(data, str) {
       if (data.energyType == 1) {
         let sum = Math.round(data.electric / 10)
-        return `active-li-${sum}`
+        return str === 'width' ? `width:${sum * 10}%` : `active-li-${sum}`
       } else if (data.energyType == 2) {
         let sum = Math.round(data.oil / 10)
-        return `active-li-${sum}`
+        return str === 'width' ? `width:${sum * 10}%` : `active-li-${sum}`
       } else {
         let sum = parseInt(data.oil) + parseInt(data.electric)
         sum = Math.round(sum / 20)
-        return `active-li-${sum}`
+        return str === 'width' ? `width:${sum * 10}%` : `active-li-${sum}`
       }
+    },
+    GetEnergyType(data) {
+      if (data.energyType) {
+        if (data.energyType == 1) {
+          return '新能源汽车'
+        } else if (data.energyType == 2) {
+          return '汽油汽车'
+        } else return '混合动力汽车'
+      }
+    },
+    GetSeatNumber(data) {
+      if (data.carsAttr) {
+        let attr = JSON.parse(data.carsAttr)
+        return attr.carsBody.seat + '座'
+      }
+    },
+  },
+  methods: {
+    openCarsInfo() {
+      //视图高度
+      const viewHeight =
+        document.documentElement.clientHeight || document.body.clientHeight
+
+      //汽车信息高度
+      const height = viewHeight - 145
+      this.cars_info_show = true
+      if (this.timer) clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.cars_info_height = `${height}px`
+        clearTimeout(this.timer)
+      }, 10)
+    },
+    closeCarsInfo() {
+      this.cars_info_height = 0
+      this.cars_info_show = false
     },
   },
 }
