@@ -20,6 +20,7 @@ const routes = [{
         //会员页
         path: '/user',
         name: 'User',
+        meta: { title: '用户中心' },
         component: () =>
             import ('../views/user/index')
     }, {
@@ -52,6 +53,21 @@ const routes = [{
         name: 'PhoneNum',
         component: () =>
             import ('../views/safe/phonenum')
+    }, {
+        path: '/login',
+        name: 'Login',
+        component: () =>
+            import ('../views/account/login')
+    }, {
+        path: '/register',
+        name: 'Register',
+        component: () =>
+            import ('../views/account/register')
+    }, {
+        path: '/forget',
+        name: 'Forget',
+        component: () =>
+            import ('../views/account/forget')
     }]
 }];
 

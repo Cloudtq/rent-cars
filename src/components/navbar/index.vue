@@ -10,11 +10,14 @@
   </div>
 </template>
 <script>
+import { getToken } from '@/utils/cookiesCars'
 export default {
   name: 'NavBar',
   methods: {
     toUser() {
-      this.$router.push('/user')
+      this.$router.push({
+        name: getToken() ? 'User' : 'Login',
+      })
     },
     selfLocation() {
       this.$store.commit('location/SELF_LOCATION')

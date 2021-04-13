@@ -28,7 +28,7 @@ service.interceptors.response.use(
         const data = response.data;
         // 不为0，即接口异常时
         if (data.resCode !== 0) {
-            Message.error(data.message);
+            // Message.error(data.message);
             return Promise.reject(data);
         } else {
             return data; // return Promise.resolve(data);

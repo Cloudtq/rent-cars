@@ -33,17 +33,24 @@
         帮助中心
       </router-link>
     </ul>
-    <button class="logout">登出</button>
+    <button class="logout" @click="logout">登出</button>
   </div>
 </template>
 <script>
-export default { 
-   name: "User" 
-} 
+import { removeToken, removeUsername } from '@/utils/cookiesCars'
+export default {
+  name: 'User',
+  methods: {
+    logout() {
+      removeToken()
+      removeUsername()
+    },
+  },
+}
 </script>
 <style lang='scss'>
 @import './index.scss';
-.logout{
+.logout {
   position: absolute;
   bottom: 60px;
   left: 50%;
@@ -59,6 +66,5 @@ export default {
   font-size: 18px;
   border: none;
   outline: none;
-
 }
 </style>

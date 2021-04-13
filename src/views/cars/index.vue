@@ -78,7 +78,7 @@ export default {
     '$store.state.app.isClickCarsList': {
       handler(newValue) {
         console.log(newValue)
-        if (!newValue) {
+        if (newValue) {
           this.carsList = []
           this.$store.commit('app/CHANGE_CarsListFlag', true)
         }

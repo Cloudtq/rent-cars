@@ -26,3 +26,14 @@ export function getUsername() {
 export function removeUsername() {
     return Cookies.remove(userNameKey);
 }
+
+
+/****************************************
+ * ***** 用户
+ * ********************************************************* */
+
+// 变量
+const accountToken = "accountToken";
+const accountUsername = "accountUsername";
+// 获取token
+export function getAccountToken() { return Cookies.get(accountToken); }
