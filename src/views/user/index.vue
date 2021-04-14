@@ -1,9 +1,10 @@
 <template>
   <div class="user-container">
+    <Back />
     <div class="user-info">
       <img src="~@/assets/images/avatar.jpg" alt="">
       <div class="meta">
-        <h4 class="email">1148026508@qq.com</h4>
+        <h4 class="email">{{username}}</h4>
         <span>
           文明驾驶分
           <strong>0</strong>
@@ -37,13 +38,24 @@
   </div>
 </template>
 <script>
-import { removeToken, removeUsername } from '@/utils/cookiesCars'
 export default {
   name: 'User',
+  data() {
+    return {
+      username: this.$store.state.account.username,
+    }
+  },
   methods: {
     logout() {
-      removeToken()
-      removeUsername()
+      this.$store.dispatch('account/logoutAction').then((res) => {
+        this.$router.replace({
+          name: 'Index',
+        })
+        this.$message({
+          type: 'success',
+          message: '账号已安全退出',
+        })
+      })
     },
   },
 }

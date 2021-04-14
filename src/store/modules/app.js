@@ -2,19 +2,26 @@ const state = {
     //是否点击了车辆列表
     isClickCarsList: true,
     //是否请求车辆列表
-    isRequestCarsList: false
-}
+    isRequestCarsList: false,
+
+    //路由名称
+    routerName: "",
+};
 
 const mutations = {
     CHANGE_CarsListFlag(state, value) {
-        state.isClickCarsList = value
+        state.isClickCarsList = value;
     },
     CHANGE_RequestListFlag(state, value) {
-        state.isRequestCarsList = value
-    }
-}
+        state.isRequestCarsList = value;
+    },
 
-const actions = {}
-const getters = {}
+    SET_ROUTERNAME(state, value) {
+        state.routerName = value;
+    },
+};
 
-export default { namespaced: true, state, mutations, actions, getters }
+const actions = {};
+const getters = {};
+
+export default { namespaced: true, state, mutations, actions, getters };

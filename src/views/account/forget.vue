@@ -1,6 +1,6 @@
 <template>
   <div class="user-container">
-    <Back column="忘记密码">
+    <Back>
       <template v-slot:navHeaderRight>
         <router-link to="/login" class="color-white opacity-4">登陆</router-link>
       </template>
@@ -64,15 +64,16 @@ export default {
         password: sha1(this.form.password),
         code: this.form.code,
       }
-      console.log(requestData)
-      Forget(requestData).then((res) => {
+      this.$store.dispatch('account/forgetAction').then((res) => {
         this.$message({
           type: 'success',
           message: res.message,
         })
-        this.$router.replace({
-          name: 'Login',
-        })
+        this.$router
+          .replace({
+            name: 'Login',
+          })
+          .catch((err) => {})
       })
     },
   },

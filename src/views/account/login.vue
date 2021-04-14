@@ -1,6 +1,6 @@
 <template>
   <div class="user-container">
-    <Back column="登陆">
+    <Back>
       <template v-slot:navHeaderRight>
         <router-link to="/register" class="color-white opacity-4">注册</router-link>
       </template>
@@ -22,13 +22,9 @@
 <script>
 import sha1 from 'js-sha1'
 
-import { Login } from '@/api/account'
-
 import Username from '@/components/account/username'
 import PasswordVue from '@/components/account/password'
 
-//cookies
-import { setToken, setUsername } from '@/utils/cookiesCars'
 export default {
   name: 'Login',
   components: { Username, PasswordVue },
@@ -56,17 +52,18 @@ export default {
         username: this.form.username,
         password: sha1(this.form.password),
       }
-      Login(requestData).then((res) => {
-        this.$message({
-          type: 'success',
-          message: res.message,
+      this.$store
+        .dispatch('account/loginAction', requestData)
+        .then((res) => {
+          this.$message({
+            type: 'success',
+            message: res.message,
+          })
+          this.$router.replace({
+            name: 'Index',
+          })
         })
-        setToken(res.data.token)
-        setUsername(res.data.username)
-        this.$router.replace({
-          name: 'Index',
-        })
-      })
+        .catch((err) => {})
     },
   },
 }

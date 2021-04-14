@@ -1,6 +1,6 @@
 <template>
   <div class="user-container">
-    <Back column="注册">
+    <Back>
       <template v-slot:navHeaderRight>
         <router-link to="/login" class="color-white opacity-4">登录</router-link>
       </template>
