@@ -98,7 +98,6 @@ export default {
   },
   beforeMount() {
     this.show = getToken() ? false : true
-    console.log(this.show)
   },
   methods: {
     // 倒计时

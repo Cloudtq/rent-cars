@@ -18,7 +18,6 @@ service.interceptors.request.use(
     },
     function(error) {
         // 对请求错误做些什么
-        console.log("111");
         return Promise.reject(error);
     }
 );
@@ -27,10 +26,9 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     function(response) {
         const data = response.data;
-        console.log(data);
         // 不为0，即接口异常时
         if (data.resCode !== 0) {
-            Message.error(data.message);
+            // Message.error(data.message);
             return Promise.reject(data);
         } else {
             return data; // return Promise.resolve(data);
