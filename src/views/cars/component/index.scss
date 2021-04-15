@@ -36,7 +36,7 @@
     @extend %clearfix;
     img {
         float: right;
-        height: 120px;
+        height: 100px;
     }
     .info {
         display: flex;
@@ -123,6 +123,8 @@
     right: 0;
     bottom: 0;
     padding-top: 0;
+    height:0;
+    @include webkit(transition, all .3s ease 0s);
     .column {
         margin-bottom: 19px;
         position: relative;

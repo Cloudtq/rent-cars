@@ -2,9 +2,9 @@
   <div>
 
     <!-- cars data渲染 -->
-    <Cars />
+    <Cars ref="cars" />
     <!-- 地图 -->
-    <Map />
+    <Map ref='map' @callbackComponent="callbackComponent" />
     <!-- 导航 -->
     <NavBar />
     <!-- 会员 -->
@@ -19,6 +19,7 @@ import Map from '../amap'
 import Cars from '../cars'
 import NavBar from '@c/navbar'
 import Login from './login'
+import { Parking } from '@/api/parking'
 
 export default {
   name: 'Index',
@@ -36,13 +37,53 @@ export default {
       return this.$route.name === 'Index' ? false : true
     },
   },
-  mounted() {
-    document.addEventListener('mouseup', (e) => {
-      const userCon = document.getElementById('children-view')
-      if (userCon && !userCon.contains(e.target)) {
-        this.$router.push('/')
-      }
-    })
+
+  methods: {
+    callbackComponent(params) {
+      params.function && this[params.function](params.data)
+    },
+
+    //地图初始化回调
+    loadMap() {
+      this.getParking()
+    },
+    getParking() {
+      Parking().then((res) => {
+        const data = res.data.data
+        data.forEach((item) => {
+          item.position = item.lnglat.split(',')
+          item.content =
+            "<img src='" +
+            require('@/assets/images/parking_location_img.png') +
+            " ' />"
+          item.offset = [-25, -55]
+          item.offsetText = [-25, -55]
+          item.text = `<div  style="width: 52px; font-size: 20px; color: #fff; text-align: center; height: 52px; border-radius: 100px;line-height:50px; ">${item.carsNumber}</div>`
+          item.events = {
+            click: (e) => {
+              console.log('正在请求数据')
+              this.$store.commit('app/CHANGE_RequestListFlag', true)
+              this.walking(e)
+              this.getCarsList(e)
+            },
+          }
+        })
+        //调地图的方法
+        this.$refs.map.parkingData(data)
+      })
+    },
+    walking(e) {
+      this.$refs.map.handlerWaling(e.target.getExtData().lnglat.split(','))
+      this.$refs.map.saveParkingDatas({
+        key: 'parkingDatas',
+        value: e.target.getExtData(),
+      })
+    },
+    getCarsList(e) {
+      // console.log(e)
+      const data = e.target.getExtData()
+      this.$refs.cars && this.$refs.cars.getCarsList(data.id)
+    },
   },
   watch: {},
 }
