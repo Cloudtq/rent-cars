@@ -74,21 +74,9 @@
         </div>
         <p class="info color-main text-center">取车约支付12.0元停车费，实际补贴12.0元</p>
         <ul class="cars-type-list">
-          <li class="current">
-            <h4 class="name">日租车</h4>
-            <span class="price">￥300/1天</span>
-          </li>
-          <li>
-            <h4 class="name">日租车</h4>
-            <span class="price">￥300/1天</span>
-          </li>
-          <li>
-            <h4 class="name">日租车</h4>
-            <span class="price">￥300/1天</span>
-          </li>
-          <li>
-            <h4 class="name">日租车</h4>
-            <span class="price">￥300/1天</span>
+          <li v-for="item in leaseListData" :class="{'current': leaseId == item.carsLeaseTypeId}" :key="item.carsLeaseTypeId" @click="selectLeaseType(item)">
+            <h4 class="name">{{ item.carsLeaseTypeName }}</h4>
+            <span class="price">￥{{ item.price }}</span>
           </li>
         </ul>
         <div class="clause-dec">
@@ -97,11 +85,13 @@
         </div>
       </div>
 
-      <a href="javascript:void(0);" class="select-car-btn">预约用车</a>
+      <a href="javascript:void(0);" class="select-car-btn" @click="confirmCars">预约用车</a>
     </section>
   </div>
 </template>
 <script>
+import { GetLeaseList, ConfirmCars } from '@/api/cars'
+
 export default {
   name: 'CarsList',
   props: {
@@ -115,6 +105,13 @@ export default {
       cars_info_show: false,
       cars_info_height: 0,
       timer: null,
+      // 租赁类型列表
+      leaseListData: [],
+      leaseId: '',
+      token: this.$store.state.account.token,
+      message_item: this.$store.state.config.message_item,
+      //临时 key
+      backup_key: '',
     }
   },
   filters: {
@@ -148,6 +145,7 @@ export default {
     },
   },
   methods: {
+    //打开车辆信息
     openCarsInfo() {
       //视图高度
       const viewHeight =
@@ -161,10 +159,91 @@ export default {
         this.cars_info_height = `${height}px`
         clearTimeout(this.timer)
       }, 10)
+
+      this.getLaseList()
     },
+
+    //关闭车辆信息
     closeCarsInfo() {
       this.cars_info_height = 0
       this.cars_info_show = false
+    },
+
+    /** 选择租赁类型 */
+    selectLeaseType(data) {
+      this.leaseId = data.carsLeaseTypeId
+    },
+    /** 获取租赁类 */
+    getLaseList() {
+      if (this.leaseListData && this.leaseListData.length > 0) {
+        return false
+      }
+      GetLeaseList({ carsId: this.data.id }).then((response) => {
+        const dataItem = response.data
+
+        if (dataItem) {
+          this.leaseListData = dataItem.data
+        }
+      })
+    },
+
+    // 预约用车
+    confirmCars() {
+      if (!this.token) {
+        this.$router.push({
+          name: 'Login',
+        })
+        return false
+      }
+      if (!this.leaseId) {
+        this.$message({
+          type: 'error',
+          message: '请选择租赁类型！',
+        })
+        return false
+      }
+      const requestData = {
+        cars_id: this.data.id,
+        cars_lease_type_id: this.leaseId,
+      }
+
+      ConfirmCars(requestData).then((res) => {
+        const data = res.data
+        if (
+          !data.check_real_name ||
+          !data.check_cars ||
+          !data.gilding ||
+          !data.illegalAmount
+        ) {
+          let message = ''
+
+          const key = Object.keys(data)
+          if (key && key.length > 0) {
+            this.backup_key = key[0]
+            this.message_item[key[0]].msg &&
+              (message = this.message_item[key[0]].msg)
+          }
+
+          this.$confirm(message, '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }).then(() => {
+            let router =
+              this.message_item[this.backup_key].router &&
+              this.message_item[this.backup_key].router
+            if (router) {
+              this.$router.push({
+                path: router,
+                query: {
+                  type: this.message_item[this.backup_key].type,
+                },
+              })
+            }
+          })
+          return false
+        }
+      })
     },
   },
 }

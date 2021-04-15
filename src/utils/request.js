@@ -1,6 +1,8 @@
 import axios from "axios";
 // cookies
 import { getToken, getUsername } from "./cookies";
+import { getTokenCars } from "./cookiesCars";
+
 // 创建实例
 const service = axios.create({
     baseURL: "", // 请求地址  /apiLogin/getCode/
@@ -14,6 +16,7 @@ service.interceptors.request.use(
         // 在发送请求之前做些什么
         config.headers["Token"] = getToken(); // 携带token
         config.headers["Username"] = getUsername(); // 携带token
+        config.headers["Tokencars"] = getTokenCars(); //携带会员的token
         return config;
     },
     function(error) {

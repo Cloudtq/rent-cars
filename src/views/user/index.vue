@@ -13,15 +13,15 @@
     </div>
 
     <ul class="group-links">
-      <router-link to="/user" tag="a" class="arrow">
+      <router-link to="/my" tag="a" class="arrow">
         <i class="icon icon-user-link001"></i>
         我的账户
       </router-link>
-      <router-link to="/user" tag="a" class="arrow">
+      <router-link to="/order" tag="a" class="arrow">
         <i class="icon icon-user-link002"></i>
         租车订单
       </router-link>
-      <router-link to="/user" tag="a" class="arrow">
+      <router-link to="/authentication" tag="a" class="arrow">
         <i class="icon icon-user-link003"></i>
         实名认证
       </router-link>
