@@ -24,6 +24,26 @@ const state = {
             msg: "请先绑定银行卡",
             router: "/authentication",
         },
+        subscribe: {
+            msg: "您已预约了其他车辆，请勿再次预约",
+        },
+    },
+    cars_status: {
+        WAIT: {
+            zh: "待取车",
+        },
+        OVERTIME: {
+            zh: "超时",
+        },
+        OVER: {
+            zh: "完成",
+        },
+        CANCEL: {
+            zh: "已取消",
+        },
+        RETURN: {
+            zh: "待还车",
+        },
     },
 };
 

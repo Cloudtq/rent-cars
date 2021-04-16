@@ -1,12 +1,16 @@
 const state = {
-    selfLocation: true
-}
+    selfLocation: true,
+    parking_info: [],
+};
 const mutations = {
     SELF_LOCATION(state) {
-        state.selfLocation = !state.selfLocation
-    }
-}
-const actions = {}
-const getters = {}
+        state.selfLocation = !state.selfLocation;
+    },
+    SET_PARKING_INFO(state, value) {
+        state.parking_info = value;
+    },
+};
+const actions = {};
+const getters = {};
 
-export default { namespaced: true, state, mutations, actions, getters }
+export default { namespaced: true, state, mutations, actions, getters };

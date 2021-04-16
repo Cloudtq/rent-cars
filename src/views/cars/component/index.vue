@@ -112,6 +112,12 @@ export default {
       message_item: this.$store.state.config.message_item,
       //临时 key
       backup_key: '',
+      audit_status: [
+        'check_real_name',
+        'check_cars',
+        'gilding',
+        'illegalAmount',
+      ],
     }
   },
   filters: {
@@ -209,40 +215,55 @@ export default {
 
       ConfirmCars(requestData).then((res) => {
         const data = res.data
-        if (
-          !data.check_real_name ||
-          !data.check_cars ||
-          !data.gilding ||
-          !data.illegalAmount
-        ) {
-          let message = ''
+        const key = Object.keys(data)
 
-          const key = Object.keys(data)
-          if (key && key.length > 0) {
-            this.backup_key = key[0]
+        if (key && key.length > 0) {
+          if (this.audit_status.includes(key[0])) {
+            if (
+              !data.check_real_name ||
+              !data.check_cars ||
+              !data.gilding ||
+              !data.illegalAmount
+            ) {
+              let message = ''
+
+              this.backup_key = key[0]
+              this.message_item[key[0]].msg &&
+                (message = this.message_item[key[0]].msg)
+              this.$confirm(message, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning',
+              }).then(() => {
+                let router =
+                  this.message_item[this.backup_key].router &&
+                  this.message_item[this.backup_key].router
+                if (router) {
+                  this.$router.push({
+                    path: router,
+                    query: {
+                      type: this.message_item[this.backup_key].type,
+                    },
+                  })
+                }
+              })
+              return false
+            }
+          } else {
+            let message = ''
             this.message_item[key[0]].msg &&
               (message = this.message_item[key[0]].msg)
-          }
 
-          this.$confirm(message, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning',
-          }).then(() => {
-            let router =
-              this.message_item[this.backup_key].router &&
-              this.message_item[this.backup_key].router
-            if (router) {
-              this.$router.push({
-                path: router,
-                query: {
-                  type: this.message_item[this.backup_key].type,
-                },
-              })
-            }
-          })
-          return false
+            this.$message({
+              type: 'error',
+              message,
+            })
+          }
         }
+        this.$message({
+          type: 'success',
+          message: data.message,
+        })
       })
     },
   },
