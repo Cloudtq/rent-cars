@@ -1,17 +1,17 @@
+//Element-UI
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
 import Vue from "vue";
 import App from "./App.vue";
+import "./components/back";
+//高德地图
+import "./plugin/aMap";
 import router from "./router";
+// 全局路由守卫
+import "./router/per";
 import store from "./store";
 
-//Element-UI
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
-
 Vue.use(ElementUI);
-
-import "./components/back"
-//高德地图
-import "./plugin/aMap"
 
 Vue.config.productionTip = false;
 

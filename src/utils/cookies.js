@@ -4,7 +4,6 @@ const tokenKey = "tokenAdmin";
 const userNameKey = "username";
 // 获取token
 export function getToken() {
-    console.log(Cookies.get(tokenKey));
     return Cookies.get(tokenKey);
 }
 // 写入token
@@ -27,3 +26,14 @@ export function getUsername() {
 export function removeUsername() {
     return Cookies.remove(userNameKey);
 }
+
+
+/****************************************
+ * ***** 用户
+ * ********************************************************* */
+
+// 变量
+const accountToken = "accountToken";
+const accountUsername = "accountUsername";
+// 获取token
+export function getAccountToken() { return Cookies.get(accountToken); }

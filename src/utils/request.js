@@ -1,6 +1,8 @@
 import axios from "axios";
 // cookies
 import { getToken, getUsername } from "./cookies";
+import { getTokenCars } from "./cookiesCars";
+
 // 创建实例
 const service = axios.create({
     baseURL: "", // 请求地址  /apiLogin/getCode/
@@ -14,11 +16,11 @@ service.interceptors.request.use(
         // 在发送请求之前做些什么
         config.headers["Token"] = getToken(); // 携带token
         config.headers["Username"] = getUsername(); // 携带token
+        config.headers["Tokencars"] = getTokenCars(); //携带会员的token
         return config;
     },
     function(error) {
         // 对请求错误做些什么
-        console.log("111");
         return Promise.reject(error);
     }
 );
@@ -27,10 +29,9 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     function(response) {
         const data = response.data;
-        console.log(data);
         // 不为0，即接口异常时
         if (data.resCode !== 0) {
-            Message.error(data.message);
+            // Message.error(data.message);
             return Promise.reject(data);
         } else {
             return data; // return Promise.resolve(data);

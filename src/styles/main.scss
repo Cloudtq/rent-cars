@@ -1,36 +1,69 @@
-@import './normalize.scss';
-@import './base.scss';
-@import './icon.scss';
-@import './ui.scss';
-// float
-.pull-right {
-    float: right;
+@import "./sassConfig.scss";
+@import "./normalize.scss";
+@import "./ui.scss";
+@import "./icon.scss";
+@import "./base.scss";
+@font-face {
+    font-family: "bahnschrift";
+    src: url("~@/assets/bahnschrift.ttf");
 }
 
-.pull-left {
-    float: left;
+
+/* blank */
+
+.blank-40 {
+    height: 40px;
 }
 
-// clearfix
-.clearfix {
-    @extend %clearfix;
+.blank-20 {
+    height: 20px;
 }
 
-.fs-24 {
-    font-size: 24px;
+.blank-100 {
+    height: 100px;
 }
 
-.p-r {
-    position: relative;
-}
 
-.p-a {
-    position: absolute;
-}
+/* color */
 
 .color-main {
     color: $color-main;
 }
+
+.color-white {
+    color: white;
+}
+
+.color-success {
+    color: #09bd00;
+}
+
+.color-fail {
+    color: #bd1b00;
+}
+
+.color-WAIT {
+    color: $color-yellow;
+}
+
+.color-OVERTIME {
+    color: $color-gray;
+}
+
+.color-OVER {
+    color: $color-green;
+}
+
+.color-CANCEL {
+    color: $color-gray;
+}
+
+.color-RETURN {
+    color: $color-yellow;
+}
+
+
+/* text-algin */
 
 .text-center {
     text-align: center;
@@ -44,13 +77,92 @@
     text-align: right;
 }
 
+
+/* line-height */
+
+.lh-40 {
+    line-height: 40px;
+}
+
+
+/* float */
+
+.pull-right {
+    float: right;
+}
+
+.pull-left {
+    float: left;
+}
+
+
+/* font-size */
+
+.fs-24 {
+    font-size: 24px;
+}
+
+.fs-12 {
+    font-size: 12px;
+}
+
+.fs-18 {
+    font-size: 18px;
+}
+
+.fa-b {
+    font-family: "bahnschrift";
+}
+
+
+/* position */
+
+.p-r {
+    position: relative;
+}
+
+.p-a {
+    position: absolute;
+}
+
+
+/* margin */
+
+.mr-15 {
+    margin-right: 15px;
+}
+
+
+/* clearfix */
+
+.clearfix {
+    @extend %clearfix;
+}
+
+
+/* opacity */
+
+.opacity-4 {
+    opacity: 0.4;
+} // 0~1
+
+/* flex */
+
+.flex-1 {
+    flex: 1;
+}
+
+
+/* common ui */
+
 .select-car-btn {
     display: block;
     width: 240px;
     height: 84px;
+    margin: 0 17px;
+    border-radius: 100px;
     line-height: 84px;
     text-align: center;
-    border-radius: 100px;
     color: #fff;
     font-size: 26px;
     font-weight: 300;
@@ -59,6 +171,8 @@
 
 .user-container {
     padding: 0 30px;
+    overflow-y: auto;
+    height: 100%;
 }
 
 
@@ -69,29 +183,38 @@
         position: relative;
         display: block;
         margin: 0 -30px;
-        padding-left: 30px;
+        padding: 0 30px;
         height: 64px;
-        line-height: 60px;
-        color: rgba(255, 255, 255, .4);
-        border-bottom: 1px solid rgba(255, 255, 255, .03);
+        line-height: 64px;
+        color: rgba(255, 255, 255, 0.4);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
         font-size: 15px;
     }
     .icon {
-        margin: 0px 16px -10px 0px;
         width: 30px;
         height: 30px;
+        margin: 0 16px -10px 0;
     }
     .arrow:after {
-        position: absolute;
         content: "";
+        position: absolute;
         right: 30px;
         top: 50%;
-        margin-top: -7px;
         width: 10px;
         height: 10px;
-        border-top: 1px solid rgba(255, 255, 255, .1);
-        border-right: 1px solid rgba(255, 255, 255, .1);
-        @include webkit(transform, rotate(45deg));
-        @include webkit(box-sizing, border-box);
+        margin-top: -7px;
+        border-top: 1px solid #fff;
+        border-right: 1px solid #fff;
+        @include webkit(box-sizing,
+        border-box);
+        @include webkit(transform,
+        rotate(45deg));
+        opacity: 0.1;
     }
+}
+
+.button-block {
+    width: 100%;
+    display: block;
+    text-align: center;
 }

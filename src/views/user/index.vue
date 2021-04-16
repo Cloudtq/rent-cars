@@ -1,9 +1,10 @@
 <template>
   <div class="user-container">
+    <Back />
     <div class="user-info">
       <img src="~@/assets/images/avatar.jpg" alt="">
       <div class="meta">
-        <h4 class="email">1148026508@qq.com</h4>
+        <h4 class="email">{{username}}</h4>
         <span>
           文明驾驶分
           <strong>0</strong>
@@ -12,15 +13,15 @@
     </div>
 
     <ul class="group-links">
-      <router-link to="/user" tag="a" class="arrow">
+      <router-link to="/my" tag="a" class="arrow">
         <i class="icon icon-user-link001"></i>
         我的账户
       </router-link>
-      <router-link to="/user" tag="a" class="arrow">
+      <router-link to="/order" tag="a" class="arrow">
         <i class="icon icon-user-link002"></i>
         租车订单
       </router-link>
-      <router-link to="/user" tag="a" class="arrow">
+      <router-link to="/authentication" tag="a" class="arrow">
         <i class="icon icon-user-link003"></i>
         实名认证
       </router-link>
@@ -33,17 +34,35 @@
         帮助中心
       </router-link>
     </ul>
-    <button class="logout">登出</button>
+    <button class="logout" @click="logout">登出</button>
   </div>
 </template>
 <script>
-export default { 
-   name: "User" 
-} 
+export default {
+  name: 'User',
+  data() {
+    return {
+      username: this.$store.state.account.username,
+    }
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('account/logoutAction').then((res) => {
+        this.$router.replace({
+          name: 'Index',
+        })
+        this.$message({
+          type: 'success',
+          message: '账号已安全退出',
+        })
+      })
+    },
+  },
+}
 </script>
 <style lang='scss'>
 @import './index.scss';
-.logout{
+.logout {
   position: absolute;
   bottom: 60px;
   left: 50%;
@@ -59,6 +78,5 @@ export default {
   font-size: 18px;
   border: none;
   outline: none;
-
 }
 </style>
